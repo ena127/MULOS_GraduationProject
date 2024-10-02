@@ -1,2 +1,10 @@
-# 2024_final_project
-2024년 4학년 졸업프로젝트
+# mulos
+
+
+[✓] Flutter (Channel stable, 3.24.0, on macOS 14.4.1 23E224 darwin-arm64, locale ko-KR)
+• Flutter version 3.24.0 on channel stable at /
+• Upstream repository https://github.com/flutter/flutter.git
+• Framework revision 80c2e84975 (7 weeks ago), 2024-07-30 23:06:49 +0700
+• Engine revision b8800d88be
+• Dart version 3.5.0
+• DevTools version 2.37.2
