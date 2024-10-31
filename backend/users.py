@@ -1,6 +1,10 @@
 from flask import Blueprint, jsonify, request
 from flask_restful import Resource, Api
-from app import get_db_connection
+from database import get_db_connection
+
+# Blueprint 생성
+users_bp = Blueprint('users', __name__)
+api = Api(users_bp)  # Blueprint에 Api 객체 연결
 
 class Users(Resource):
     # 사용자 조회 (GET /users)
@@ -63,3 +67,5 @@ class Users(Resource):
 
         return jsonify({'message': '사용자가 추가되었습니다!'}), 201
 
+# Users 클래스를 Blueprint에 등록
+api.add_resource(Users, '', '/<int:user_id>')

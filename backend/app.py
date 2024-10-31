@@ -1,13 +1,11 @@
-from flask import Flask, jsonify, request
+from flask import Flask
 from flask_cors import CORS
 from config import Config
-import pymysql
-from flask_restful import Resource, Api
-from datetime import datetime
-from users import Users
-from devices import Devices
-from returns import Returns
-from rentals import Rentals
+from flask_restful import Api
+from users import users_bp
+from devices import devices_bp
+from returns import returns_bp
+from rentals import rentals_bp
 
 
 
@@ -22,28 +20,12 @@ api = Api(app)
 # config.py 파일에서 설정 로드
 app.config.from_object(Config)
 
-# 엔드포인트 정의
-api.add_resource(Users, '/users', '/users/<int:user_id>')  # 사용자 조회 및 추가
-api.add_resource(Devices, '/devices', '/devices/<int:device_id>')  # 기기 조회 및 추가
-api.add_resource(Rentals, '/rentals', '/rentals/<int:rental_id>')  # 대여 기록 추가
-api.add_resource(Returns, '/returns', '/returns/<int:return_id>')  # 반납 기록 추가
+# Blueprint 등록
+app.register_blueprint(users_bp, url_prefix='/users')
+app.register_blueprint(devices_bp, url_prefix='/devices')
+app.register_blueprint(returns_bp, url_prefix='/returns')
+app.register_blueprint(rentals_bp, url_prefix='/rentals')
 
-# MySQL 연결
-def get_db_connection():
-    try:
-        conn = pymysql.connect(
-            host=app.config['MYSQL_HOST'],
-            user=app.config['MYSQL_USER'],
-            password=app.config['MYSQL_PASSWORD'],
-            db=app.config['MYSQL_DB'],
-            port=3306,
-            charset='utf8'
-        )
-        return conn
-    except pymysql.MySQLError as e:
-        print(f"Error connecting to database: {e}")
-        return None
-    
 
 # Flask 서버 실행
 if __name__ == '__main__':

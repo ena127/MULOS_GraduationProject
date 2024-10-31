@@ -1,8 +1,12 @@
-from flask import Flask, jsonify, request
+from flask import Blueprint, jsonify, request
 from flask_restful import Resource, Api
-from app import get_db_connection
+from database import get_db_connection
 from datetime import datetime
 
+
+# Blueprint 생성
+returns_bp = Blueprint('returns', __name__)
+api = Api(returns_bp)  # Blueprint에 Api 객체 연결
 
 class Returns(Resource):
 # 반납 기록 추가 (POST /returns)
@@ -26,3 +30,5 @@ class Returns(Resource):
         conn.close()
 
         return jsonify({'message': '반납 기록이 추가되었습니다!'}), 201
+
+api.add_resource(Returns, '')

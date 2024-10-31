@@ -1,12 +1,21 @@
-from flask import Flask, jsonify, request
+from flask import Blueprint, jsonify, request
 from flask_restful import Resource, Api
-from app import get_db_connection
+from database import get_db_connection
 from datetime import datetime
+
+
+# Blueprint 생성
+rentals_bp = Blueprint('rentals', __name__)
+api = Api(rentals_bp)  # Blueprint에 Api 객체 연결
 
 class Rentals(Resource):
 # 대여 기록 추가 (POST /rentals)
 #@app.route('/rentals', methods=['POST'])
     def post(self):
+        # 데이터 유효성 검사 : student_id가 None이면 error code 400
+        if not data or 'student_id' not in data:
+            return jsonify({'error': 'Missing required fields'}), 400 
+        
         data = request.json
         user_id = data.get('user_id')
         device_id = data.get('device_id')
@@ -28,7 +37,6 @@ class Rentals(Resource):
         cursor.close()
         conn.close()
 
-        if not data or 'student_id' not in data:
-            return jsonify({'error': 'Missing required fields'}), 400 
-
         return jsonify({'message': '대여 기록이 추가되었습니다!'}), 201
+    
+api.add_resource(Rentals, '')

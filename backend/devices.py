@@ -1,6 +1,11 @@
-from flask import Flask, jsonify, request
+from flask import Blueprint, jsonify, request
 from flask_restful import Resource, Api
-from app import get_db_connection
+from database import get_db_connection
+
+
+# Blueprint 생성
+devices_bp = Blueprint('devices', __name__)
+api = Api(devices_bp)  # Blueprint에 Api 객체 연결
 
 # 기기 조회 (GET /devices)
 # @app.route('/devices', methods=['GET'])
@@ -55,3 +60,6 @@ class Devices(Resource):
         conn.close()
 
         return jsonify({'message': '기기가 추가되었습니다!'}), 201
+
+# Devices 클래스를 Blueprint에 등록
+api.add_resource(Devices, '', '/<int:device_id>')
