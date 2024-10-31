@@ -42,7 +42,7 @@ class Devices(Resource):
         # ENUM 타입 유효성 검사
         valid_types = ['window', 'mac', 'galaxy tab', 'ipad', 'accessary']
         if device_type not in valid_types:
-            return jsonify({'error': 'Invalid device type'}), 400
+            return {'error': 'Invalid device type'}, 400
         
         model = data.get('model')
         availability = data.get('availability')
@@ -59,7 +59,7 @@ class Devices(Resource):
         cursor.close()
         conn.close()
 
-        return jsonify({'message': '기기가 추가되었습니다!'}), 201
+        return {'message': '기기가 추가되었습니다!'}, 201
 
 # Devices 클래스를 Blueprint에 등록
 api.add_resource(Devices, '', '/<int:device_id>')

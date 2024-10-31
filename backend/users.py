@@ -1,6 +1,9 @@
 from flask import Blueprint, jsonify, request
 from flask_restful import Resource, Api
 from database import get_db_connection
+import pymysql
+
+# 10.31 Flask-RESTful은 dict를 반환하면 자동으로 JSON으로 직렬화 함으로, 에러 메시지를 딕셔너리 형태로 반환 (jsonify로 반환하던것 수정)
 
 # Blueprint 생성
 users_bp = Blueprint('users', __name__)
@@ -47,25 +50,40 @@ class Users(Resource):
     # 사용자 추가 (POST /users)
     #@app.route('/users', methods=['POST'])
     def post(self):
+ 
         data = request.json
+        print("Received data:", data)  # 디버깅: 수신된 데이터 출력 
+
         student_id = data.get('student_id')
         role = data.get('role')
         email = data.get('email')
         name = data.get('name')
         photo_url = data.get('photo_url')
         professor = data.get('professor')
+    
+        print("Student ID:", student_id)  # 디버깅: 필드 값 확인
+        if not all([student_id, role, email, name]): # 네 개 다 값 존재하면 True, 하나라도 없으면 False
+            return {"error": "Missing required fields"}, 400  # dict로 반환
 
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute(
-            'INSERT INTO user (student_id, role, email, name, photo_url, professor) VALUES (%s, %s, %s, %s, %s, %s)',
-            (student_id, role, email, name, photo_url, professor)
-        )
-        conn.commit()
-        cursor.close()
-        conn.close()
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute(
+                'INSERT INTO user (student_id, role, email, name, photo_url, professor) VALUES (%s, %s, %s, %s, %s, %s)',
+                (student_id, role, email, name, photo_url, professor)
+            )
+            conn.commit()
+            return {"message": "User added successfully"}, 201  # dict로 반환
 
-        return jsonify({'message': '사용자가 추가되었습니다!'}), 201
+        except pymysql.MySQLError as e:
+            print(f"Database error: {e}")
+            conn.rollback()
+            return {"error": "Failed to insert data"}, 500  # dict로 반환
+
+        finally:
+            cursor.close()
+            conn.close()
+
 
 # Users 클래스를 Blueprint에 등록
 api.add_resource(Users, '', '/<int:user_id>')

@@ -6,7 +6,8 @@ from users import users_bp
 from devices import devices_bp
 from returns import returns_bp
 from rentals import rentals_bp
-
+import logging
+logging.basicConfig(level=logging.DEBUG) # 요청이 제대로 전달되고 있는지 확인
 
 
 import os
@@ -29,4 +30,4 @@ app.register_blueprint(rentals_bp, url_prefix='/rentals')
 
 # Flask 서버 실행
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
