@@ -65,7 +65,7 @@ class Rentals(Resource):
             return {'error': 'Missing required fields'}, 400 
         
 
-        user_id = data.get('user_id')
+        student_id = data.get('student_id')
         device_id = data.get('device_id')
 
         # 날짜 문자열을 datetime 형식으로 변환
@@ -74,9 +74,19 @@ class Rentals(Resource):
         approval_date = datetime.strptime(data.get('approval_date'), '%Y-%m-%dT%H:%M:%S') if data.get('approval_date') else None
         end_date = datetime.strptime(data.get('end_date'), '%Y-%m-%dT%H:%M:%S') if data.get('end_date') else None
 
-
+        # `student_id`로 `user_id` 조회
         conn = get_db_connection()
         cursor = conn.cursor()
+        cursor.execute('SELECT user_id FROM user WHERE student_id = %s', (student_id,))
+        user = cursor.fetchone()
+        
+        if not user:
+            cursor.close()
+            conn.close()
+            return {'error': 'User not found'}, 404
+
+        user_id = user[0]  # 조회된 user_id 가져오기
+
         cursor.execute(
             'INSERT INTO rental (user_id, device_id, request_date, status, approval_date, end_date) VALUES (%s, %s, %s, %s, %s, %s)',
             (user_id, device_id, request_date, status, approval_date, end_date)
@@ -85,7 +95,7 @@ class Rentals(Resource):
         cursor.close()
         conn.close()
 
-        return jsonify({'message': '대여 기록이 추가되었습니다!'}), 201
+        return {'message': '대여 기록이 추가되었습니다!'}, 201
     
 
 # 엔드포인트 설정
