@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flask_restful import Resource, Api
-from database import get_db_connection
+from .database import get_db_connection
 from datetime import datetime
 
 
@@ -91,6 +91,14 @@ class Rentals(Resource):
             'INSERT INTO rental (user_id, device_id, request_date, status, approval_date, end_date) VALUES (%s, %s, %s, %s, %s, %s)',
             (user_id, device_id, request_date, status, approval_date, end_date)
         )
+        
+        # 11.01 devices 테이블에서 해당 기기의 availability를 false로 업데이트
+        # 11.01 에러수정 - table devices를 device로 수정
+        cursor.execute(
+            'UPDATE device SET availability = false WHERE device_id = %s',
+            (device_id,)
+        )
+
         conn.commit()
         cursor.close()
         conn.close()

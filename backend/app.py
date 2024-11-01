@@ -2,10 +2,10 @@ from flask import Flask
 from flask_cors import CORS
 from config import Config
 from flask_restful import Api
-from users import users_bp
-from devices import devices_bp
-from returns import returns_bp
-from rentals import rentals_bp
+from resources.users import users_bp
+from resources.devices import devices_bp
+from resources.returns import returns_bp
+from resources.rentals import rentals_bp
 import logging
 logging.basicConfig(level=logging.DEBUG) # 요청이 제대로 전달되고 있는지 확인
 

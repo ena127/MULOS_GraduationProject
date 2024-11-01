@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flask_restful import Resource, Api
-from database import get_db_connection
+from .database import get_db_connection
 from datetime import datetime
 
 
@@ -8,10 +8,6 @@ from datetime import datetime
 returns_bp = Blueprint('returns', __name__)
 api = Api(returns_bp)  # Blueprint에 Api 객체 연결
 
-from flask import jsonify, request
-from flask_restful import Resource
-from database import get_db_connection
-from datetime import datetime
 
 class Returns(Resource):
 
@@ -103,8 +99,8 @@ class Returns(Resource):
             
             device_id = device[0]
 
-            # 기기의 availability 상태를 "available"로 업데이트
-            cursor.execute('UPDATE device SET availability = %s WHERE device_id = %s', ("available", device_id))
+            # 11.01 기기의 availability 상태를 true로 업데이트
+            cursor.execute('UPDATE device SET availability = %s WHERE device_id = %s', (True, device_id))
             conn.commit()
 
             return {'message': '반납 기록이 추가되고 기기의 상태가 변경되었습니다!'}, 201

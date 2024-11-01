@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flask_restful import Resource, Api
-from database import get_db_connection
+from .database import get_db_connection
 import pymysql
 
 # 10.31 Flask-RESTful은 dict를 반환하면 자동으로 JSON으로 직렬화 함으로, 에러 메시지를 딕셔너리 형태로 반환 (jsonify로 반환하던것 수정)
@@ -84,6 +84,6 @@ class Users(Resource):
             cursor.close()
             conn.close()
 
-
 # Users 클래스를 Blueprint에 등록
 api.add_resource(Users, '', '/<int:user_id>')
+
