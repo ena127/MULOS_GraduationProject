@@ -31,7 +31,9 @@ app.register_blueprint(returns_bp, url_prefix='/returns')
 app.register_blueprint(rentals_bp, url_prefix='/rentals')
 app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(congestion_bp)
-app.register_blueprint(upload_bp, url_prefix='/upload')
+app.register_blueprint(upload_bp)  # /api/upload 경로로 설정
+
+
 # Flask 서버 실행
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
