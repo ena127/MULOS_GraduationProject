@@ -75,25 +75,25 @@ class RentalScreen extends StatelessWidget {
             const SizedBox(height: 40,),
             RentalItem(
               onTap: () {
-                Get.toNamed(AppRouter.rental_device_selection);
+                Get.toNamed(AppRouter.rental_device_selection, arguments: 'window');
               },
               title: "windows 노트북 대여",
             ),
             RentalItem(
               onTap: () {
-
+                Get.toNamed(AppRouter.rental_device_selection, arguments: 'mac');
               },
               title: "MAC 노트북 대여",
             ),
             RentalItem(
               onTap: () {
-
+                Get.toNamed(AppRouter.rental_device_selection, arguments: 'galaxy tab');
               },
               title: "Galaxy Tab 대여",
             ),
             RentalItem(
               onTap: () {
-
+                Get.toNamed(AppRouter.rental_device_selection, arguments: 'ipad');
               },
               title: "I-pad 대여",
             ),
