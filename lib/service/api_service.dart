@@ -38,26 +38,6 @@ class ApiService {
     }
   }
 
-  // Rentals API
-  Future<bool> addRental(String deviceName) async {
-    final url = Uri.parse('$baseUrl/rentals');
-    try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'device_name': deviceName}),
-      );
-
-      print("Response status: ${response.statusCode}");
-      print("Response body: ${response.body}");
-
-      return response.statusCode == 200;
-    } catch (error) {
-      print("Error in addRental: $error");
-      return false;
-    }
-  }
-
 
   Future<dynamic> getAllRentals() {
     return apiFetch('/rentals', 'GET');
@@ -133,6 +113,7 @@ class ApiService {
     return (jsonDecode(response.body) as List<dynamic>).cast<String>();
   }
 
+  //기기 모델 가져옴 (맥북 프로, 맥북 에어, 등)
   Future<List<String>> getDeviceModels(String type) async {
     final response = await http.get(Uri.parse('$baseUrl/devices/models?type=$type'));
     if (response.statusCode == 200) {
@@ -142,8 +123,12 @@ class ApiService {
     }
   }
 
-
-// 사용 가능한 기기명을 가져옴
+  // 기기이름으로 id 받아오기
+  Future<int?> getDeviceIdByName(String deviceName) async {
+    final response = await apiFetch('/devices/id?device_name=$deviceName', 'GET');
+    return response != null ? response['device_id'] as int : null;
+  }
+  // 대여 가능한 기기명 목록 불러옴
   Future<List<String>> getAvailableDevices(String model) async {
     final response = await http.get(Uri.parse('$baseUrl/devices/available?model=$model'));
     if (response.statusCode == 200) {
@@ -153,14 +138,27 @@ class ApiService {
     }
   }
 
+  /// 대여 요청
+  Future<bool> addRental(Map<String, dynamic> rentalData) async {
+    final url = Uri.parse('$baseUrl/rentals');
 
+    try {
+      print('Rental data being sent: $rentalData');
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(rentalData),
+      );
+      // 상태 코드가 200 또는 201일 경우 성공
+      return response.statusCode == 200 || response.statusCode == 201;
+    } catch (e) {
+      print("Error in addRental: $e");
+      return false;
+    }
+  }
   Future<dynamic> registerDevice(Map<String, dynamic> deviceData) {
     return apiFetch('/devices', 'POST', data: deviceData);
   }
-
-
-
-
 
 
   // 로그인 API 호출 함수
@@ -193,16 +191,19 @@ class ApiService {
           print('Error: User data is missing from the response');
           return false;
         }
+        final appPreferences = AppPreferences();
 
-        // 사용자 정보 저장
-        // 사용자 정보 저장 (null-safe 방식) : NULL값이 나오면 빈칸으로 저장
-        await AppPreferences().prefs?.setString('authToken', token ?? '');
-        await AppPreferences().prefs?.setString('studentId', user['student_id'] ?? '');
-        await AppPreferences().prefs?.setString('name', user['name'] ?? '');
-        await AppPreferences().prefs?.setString('role', user['role']?.toString() ?? '');
-        await AppPreferences().prefs?.setString('email', user['email'] ?? '');
-        await AppPreferences().prefs?.setString('professor', user['professor'] ?? '');
-        await AppPreferences().prefs?.setString('photoUrl', user['photo_url'] ?? '');
+        await appPreferences.save('authToken', token ?? '');
+        await appPreferences.save('studentId', user['student_id'] ?? '');
+
+        await appPreferences.save('name', user['name'] ?? '');
+        await appPreferences.save('role', user['role']?.toString() ?? '');
+        await appPreferences.save('email', user['email'] ?? '');
+        await appPreferences.save('professor', user['professor'] ?? '');
+        await appPreferences.save('photoUrl', user['photo_url'] ?? '');
+
+        final storedStudentId = await appPreferences.get('studentId');
+        print('Stored studentId: $storedStudentId'); // 로그로 저장된 값 확인
 
         return true;
       } else {
@@ -244,6 +245,11 @@ class ApiService {
       print('Image upload failed: ${response.statusCode}');
       return null;
     }
+  }
+  // 교수님 이름 받아오기
+  Future<List<String>> getProfessors() async {
+    final response = await apiFetch('/professors', 'GET');
+    return (response as List<dynamic>).cast<String>();
   }
 
 }

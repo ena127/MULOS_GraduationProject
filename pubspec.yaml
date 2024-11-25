@@ -37,7 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   flutter_launcher_icons: ^0.13.1
   flutter_native_splash: ^2.4.0
-
+  flutter_secure_storage: ^6.0.0
 
   get: ^4.6.6
   logger: ^2.4.0

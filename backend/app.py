@@ -9,7 +9,10 @@ from resources.rentals import rentals_bp
 from utils.upload_image import upload_bp
 from auth.auth_routes import auth_bp
 from resources.congestion import congestion_bp
+from resources.professors import professors_bp
+
 import logging
+
 logging.basicConfig(level=logging.DEBUG) # 요청이 제대로 전달되고 있는지 확인
 
 
@@ -32,7 +35,7 @@ app.register_blueprint(rentals_bp, url_prefix='/rentals')
 app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(congestion_bp)
 app.register_blueprint(upload_bp)  # /api/upload 경로로 설정
-
+app.register_blueprint(professors_bp, url_prefix='/professors')
 
 # Flask 서버 실행
 if __name__ == '__main__':

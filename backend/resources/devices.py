@@ -141,6 +141,43 @@ class RentDevice(Resource):
 
         return {'message': 'Device rented successfully'}, 200
 
+class AvailableDevicesByModel(Resource):
+    def get(self):
+        model = request.args.get('model')
+        if not model:
+            return {'error': 'Model parameter is required'}, 400
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('''
+            SELECT device_name
+            FROM device
+            WHERE model = %s AND availability = 1
+        ''', (model,))
+        devices = [row[0] for row in cursor.fetchall()]
+
+        cursor.close()
+        conn.close()
+
+        return jsonify(devices)
+
+class DeviceID(Resource):
+    def get(self):
+        device_name = request.args.get('device_name')
+        if not device_name:
+            return {'error': 'Device name parameter is required'}, 400
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('SELECT device_id FROM device WHERE device_name = %s', (device_name,))
+        result = cursor.fetchone()
+        cursor.close()
+        conn.close()
+
+        if result:
+            return {'device_id': result[0]}, 200
+        else:
+            return {'error': 'Device not found'}, 404
 
 # Blueprint에 Resource 추가
 api.add_resource(Devices, '', '/<int:device_id>')
@@ -148,3 +185,4 @@ api.add_resource(DeviceTypes, '/types')
 api.add_resource(DeviceModels, '/models')
 api.add_resource(AvailableDevices, '/available')
 api.add_resource(RentDevice, '/rent')
+api.add_resource(DeviceID, '/id')
