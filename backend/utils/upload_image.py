@@ -20,5 +20,8 @@ class Upload(Resource):
         photo_url = f'http://3.39.184.195:5000/{UPLOAD_FOLDER}/{image.filename}'
 
         return {"photo_url": photo_url}, 200
-
 api.add_resource(Upload, '/upload')
+# 정적 파일 경로 등록
+@upload_bp.route('/uploads/<filename>', methods=['GET'])
+def uploaded_file(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename

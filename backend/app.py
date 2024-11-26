@@ -10,6 +10,7 @@ from utils.upload_image import upload_bp
 from auth.auth_routes import auth_bp
 from resources.congestion import congestion_bp
 from resources.professors import professors_bp
+import utils.upload_image
 
 import logging
 
@@ -27,6 +28,7 @@ api = Api(app)
 # config.py 파일에서 설정 로드
 app.config.from_object(Config)
 
+
 # Blueprint 등록
 app.register_blueprint(users_bp, url_prefix='/users')
 app.register_blueprint(devices_bp, url_prefix='/devices')
@@ -34,7 +36,7 @@ app.register_blueprint(returns_bp, url_prefix='/returns')
 app.register_blueprint(rentals_bp, url_prefix='/rentals')
 app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(congestion_bp)
-app.register_blueprint(upload_bp)  # /api/upload 경로로 설정
+app.register_blueprint(upload_bp, url_prefix='/upload')
 app.register_blueprint(professors_bp, url_prefix='/professors')
 
 # Flask 서버 실행

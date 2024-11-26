@@ -228,7 +228,7 @@ class ApiService {
 
   //서버에 이미지 업로드하고 url받아오기
   Future<String?> uploadImage(File image) async {
-    final url = Uri.parse('$baseUrl/upload/upload'); // 서버의 업로드 엔드포인트
+    final url = Uri.parse('$baseUrl/upload'); // 서버의 업로드 엔드포인트
     final request = http.MultipartRequest('POST', url)
       ..files.add(await http.MultipartFile.fromPath('image', image.path));
 
@@ -242,6 +242,8 @@ class ApiService {
       print('Uploaded photo URL: $photoUrl'); // photo_url 출력
       return photoUrl;
     } else {
+      final errorResponse = await response.stream.bytesToString();
+      print('Error Response: $errorResponse');
       print('Image upload failed: ${response.statusCode}');
       return null;
     }
