@@ -1,0 +1,54 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+새로운 크로스 플랫폼 PowerShell 사용 https://aka.ms/pscore6
+PS C:\Users\jun08\Documents\GitHub\MulOS> ssh-keygen -t rsa -b 4096 -C "jun082555@naver.com"
+Generating public/private rsa key pair.
+Enter file in which to save the key (C:\Users\jun08/.ssh/id_rsa): 
+Created directory 'C:\\Users\\jun08/.ssh'.
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again:
+Your identification has been saved in C:\Users\jun08/.ssh/id_rsa
+Your public key has been saved in C:\Users\jun08/.ssh/id_rsa.pub
+The key fingerprint is:
+SHA256:/P/ssBkC9dII0l4F0HW+WzCU23sHMHliT/aejMGsAkY jun082555@naver.com
+The key's randomart image is:
++---[RSA 4096]----+
+|        .o.oo.o. |
+|      o o o.oO++ |
+|       * + + +++o|
+|      . S o + =o+|
+|         + o . *+|
+|          + o . o|
+CjpgVDJohQOMw3KrCAHvMW4DhZNlu9ituqI0mf8LvqHRO16Wl6cG//yQqIZeKGcp5QiP53MR2LBZpeb6D9F2i1roi8Yj823ICIu26MsbLv+zhC2HMgIzfNSq/pdbQ1UGopT/+McUGEj/dzplXrw8SWkD4LV+LvMLCCrWwOKVPC3ZbyOrVQvjsv6RzimFOGNE5MBZCx2qfyWW7OBur+Ht9R9PnoIkLr2lF3Ieo0ei3XM+zWLM/7k5CajfkYjI4hO3eBV+0XnD2B891Ot0ble5FsEGXLKFYcOfK18ukhhClLtlQQIqBx2dHlKICNjExwODqpyd+wWzfMK7aqhs7YR0GJlBMNYJnZws2nLkYHrWvuVG8Ntp88I2qQFSVcSCcFcNeEr1w+s3QIETYTdgrVK7kmJ2Sgba5x5xDRBs0L60KD09hZyI07I99YcDTP0VWH+2izB/XLE4G/O+Pk74x055p/KdMesxljutF4ydRc19dMCOGGg9ZZX2yNi4kh9fmd0XWeiieG7wcWIujTFXd8EC4kHkH1qUd2Q== jun082555@naver.com
+PS C:\Users\jun08\Documents\GitHub\MulOS>
+
+
+
+d : 'd' 용어가 cmdlet, 함수, 스크립트 파일 또는 실행할 수 있는 프로그램 이름으로 인식되지 않습니다. 이름이 정확한지 확인하고 경로가 포함된 경우 경로가 올바른지 검증한 다음 다시   
+시도하십시오.
+위치 줄:1 문자:1
++ d
++ ~
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\Users\jun08\Documents\GitHub\MulOS> cat ~/.ssh/id_rsa.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCv/dN5JUc/WcCP+7ZczvinmINkaHLLlNWzRPGIuv/sJK8eTHJt8Ss2FASSyBADNi8tZ0mFIUrA72oDLnvCkr+v7Eb1U8bys+ZFrz3qT/a3gNZ212oAiDErjpnw/VTYROwrFJBpIJg7ppBCjpgVDJohQOMw3KrCAHvMW4DhZNlu9ituqI0mf8LvqHRO16Wl6cG//yQqIZeKGcp5QiP53MR2LBZpeb6D9F2i1roi8Yj823ICIu26MsbLv+zhC2HMgIzfNSq/pdbQ1UGopT/+McUGEj/dzplXrw8SWkD4LV+LvMLCCrWwOKVPC3ZbyOrVQvjsv6RzimFOGNE5MBZCx2qfyWW7OBur+Ht9R9PnoIkLr2lF3Ieo0ei3XM+zWLM/7k5CajfkYjI4hO3eBV+0XnD2B891Ot0ble5FsEGXLKFYcOfK18ukhhClLtlQQIqBx2dHlKICNjExwODqpyd+wWzfMK7aqhs7YR0GJlBMNYJnZws2nLkYHrWvuVG8Ntp88I2qQFSVcSCcFcNeEr1w+s3QIETYTdgrVK7kmJ2Sgba5x5xDRBs0L60KD09hZyI07I99YcDTP0VWH+2izB/XLE4G/O+Pk74x055p/KdMesxljutF4ydRc19dMCOGGg9ZZX2yNi4kh9fmd0XWeiieG7wcWIujTFXd8EC4kHkHPS C:\Users\jun08\Documents\GitHub\MulOS> cat ~/.ssh/id_rsa.pri
+cat : 'C:\Users\jun08\.ssh\id_rsa.pri' 경로는 존재하지 않으므로 찾을 수 없습니다.
+위치 줄:1 문자:1
++ cat ~/.ssh/id_rsa.pri
++ ~~~~~~~~~~~~~~~~~~~~~
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.GetContentCommand
+
+PS C:\Users\jun08\Documents\GitHub\MulOS> cat ~/.ssh/id_rsa.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCv/dN5JUc/WcCP+7ZczvinmINkaHLLlNWzRPGIuv/sJK8eTHJt8Ss2FASSyBADNi8tZ0mFIUrA72oDLnvCkr+v7Eb1U8bys+ZFrz3qT/a3gNZ212oAiDErjpnw/VTYROwrFJBpIJg7ppBCjpgVDJohQOMw3KrCAHvMW4DhZNlu9ituqI0mf8LvqHRO16Wl6cG//yQqIZeKGcp5QiP53MR2LBZpeb6D9F2i1roi8Yj823ICIu26MsbLv+zhC2HMgIzfNSq/pdbQ1UGopT/+McUGEj/dzplXrw8SWkD4LV+LvMLCCrWwOKVPC3ZbyOrVQvjsv6RzimFOGNE5MBZCx2qfyWW7OBur+Ht9R9PnoIkLr2lF3Ieo0ei3XM+zWLM/7k5CajfkYjI4hO3eBV+0XnD2B891Ot0ble5FsEGXLKFYcOfK18ukhhClLtlQQIqBx2dHlKICNjExwODqpyd+wWzfMK7aqhs7YR0GJlBMNYJnZws2nLkYHrWvuVG8Ntp88I2qQFSVcSCcFcNeEr1w+s3QIETYTdgrVK7kmJ2Sgba5x5xDRBs0L60KD09hZyI07I99YcDTP0VWH+2izB/XLE4G/O+Pk74x055p/KdMesxljutF4ydRc19dMCOGGg9ZZX2yNi4kh9fmd0XWeiieG7wcWIujTFXd8EC4kHkHPS C:\Users\jun08\Documents\GitHub\MulOS> ssh -i ~/.ssh/id_rsa.pub jung@3.39.184.195
+ED25519 key fingerprint is SHA256:ou1AYN3oevC/jwci0orYyCEBdaoV2NzpOidEOtNno4s.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? y
+Please type 'yes', 'no' or the fingerprint: yes
+Warning: Permanently added '3.39.184.195' (ED25519) to the list of known hosts.
+jung@3.39.184.195: Permission denied (publickey,gssapi-keyex,gssapi-with-mic).
+PS C:\Users\jun08\Documents\GitHub\MulOS> ssh -i ~/.ssh/id_rsa jung@3.39.184.195
+jung@3.39.184.195: Permission denied (publickey,gssapi-keyex,gssapi-with-mic).
+PS C:\Users\jun08\Documents\GitHub\MulOS> ssh -i ~/.ssh/id_rsa jung@3.39.184.195
+jung@3.39.184.195: Permission denied (publickey,gssapi-keyex,gssapi-with-mic).
+PS C:\Users\jun08\Documents\GitHub\MulOS>
