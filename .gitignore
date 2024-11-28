@@ -49,3 +49,12 @@ app.*.map.json
 /backend/config.py
 #venv folder
 venv/
+
+#etc
+/backend/아카이브.zip
+*.zip
+output2_onlyperson_video2.mp4
+아카이브.zip
+*.zip
+output2_onlyperson_video2.mp4
+아카이브.zip

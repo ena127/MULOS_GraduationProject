@@ -9,8 +9,12 @@ PODS:
     - Toast
   - image_picker_ios (0.0.1):
     - Flutter
+  - MTBBarcodeScanner (5.0.11)
   - permission_handler_apple (9.3.0):
     - Flutter
+  - qr_code_scanner (0.2.0):
+    - Flutter
+    - MTBBarcodeScanner
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -23,10 +27,12 @@ DEPENDENCIES:
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
+  - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
 
 SPEC REPOS:
   trunk:
+    - MTBBarcodeScanner
     - Toast
 
 EXTERNAL SOURCES:
@@ -42,6 +48,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_picker_ios/ios"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
+  qr_code_scanner:
+    :path: ".symlinks/plugins/qr_code_scanner/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
 
@@ -51,7 +59,9 @@ SPEC CHECKSUMS:
   flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
   fluttertoast: e9a18c7be5413da53898f660530c56f35edfba9c
   image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
+  MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
+  qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   Toast: 1f5ea13423a1e6674c4abdac5be53587ae481c4e
 

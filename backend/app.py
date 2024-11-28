@@ -10,7 +10,7 @@ from utils.upload_image import upload_bp
 from auth.auth_routes import auth_bp
 from resources.congestion import congestion_bp
 from resources.professors import professors_bp
-from utils.qrcode import qrcode_bp
+from resources.qrcode import qrcode_bp
 
 import logging
 
