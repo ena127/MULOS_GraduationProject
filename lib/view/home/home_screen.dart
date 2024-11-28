@@ -25,80 +25,59 @@ class HomeScreen extends StatelessWidget {
           Obx(() {
             return ElevatedButton(
               onPressed: () {
-                if (controller.qrData.value < 0) {
-                  controller.startTimer();
+                if (controller.qrData.value.isEmpty) {
+                  controller.fetchQrFromServer();
                 }
               },
-              child: Text(controller.qrData.value < 0 ? "라운지 입장" : "${controller.remainingSeconds.value} sec ..."),
+              child: Text(controller.qrData.value.isEmpty ? "QR 생성" : "QR 생성됨"),
             );
           }),
           const SizedBox(height: 20),
           Expanded(
             child: Obx(() {
-              if (controller.qrData.value < 0) {
-                return Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: const BoxDecoration(
-                        color: AppColors.grey100,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      child: Column(
-                        children: [
-                          const Text("좌석 현황"),
-                          Obx(() => Text("모니터석: ${controller.monitorCount.value}/${controller.monitorTotalCount.value}")),
-                          Obx(() => Text("데스크탑: ${controller.desktopCount.value}/${controller.desktopTotalCount.value}")),
-                          Obx(() => Text("그룹 학습: ${controller.groupStudyCount.value}/${controller.groupStudyTotalCount.value}")),
-                          Obx(() => Text("현재 인원: ${controller.personCount.value}/${controller.personTotalCount.value}")),
-                        ],
-                      ),
+              return Column(
+                children: [
+                  if (controller.qrData.value.isNotEmpty)
+                    QrImageView(
+                      data: controller.qrData.value,
+                      version: QrVersions.auto,
+                      size: 200.0,
+                    )
+                  else
+                    const Text("QR을 생성하세요."),
+                  const SizedBox(height: 20),
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: const BoxDecoration(
+                      color: AppColors.grey100,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
-                    const SizedBox(height: 20),
-                    Obx(() {
-                      return Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: controller.congestionStatusColor.value,
-                        ),
-                        child: Text(
-                          controller.congestionStatus.value,
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      );
-                    }),
-                  ],
-                );
-              } else {
-                return Column(
-                  children: [
-                    Expanded(
-                      child: LayoutBuilder(
-                        builder: (context, constraints) {
-                          return QrImageView(
-                            data: '${controller.qrData.value}',
-                            version: QrVersions.auto,
-                            size: 270.0,
-                          );
-                        },
-                      ),
+                    child: Column(
+                      children: [
+                        const Text("좌석 현황"),
+                        Obx(() => Text(
+                          "현재 인원: ${controller.personCount.value}/${controller.personTotalCount.value}",
+                          style: const TextStyle(fontSize: 15),
+                        ))
+                      ],
                     ),
-                    const SizedBox(height: 20),
-                    GestureDetector(
-                      onTap: () {
-                        controller.startTimer();
-                      },
-                      child: const Column(
-                        children: [
-                          Icon(Icons.refresh, color: AppColors.main),
-                          Text("Regenerate"),
-                        ],
+                  ),
+                  const SizedBox(height: 20),
+                  Obx(() {
+                    return Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: controller.congestionStatusColor.value,
                       ),
-                    ),
-                  ],
-                );
-              }
+                      child: Text(
+                        controller.congestionStatus.value,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    );
+                  }),
+                ],
+              );
             }),
           ),
           const SizedBox(height: 80),
@@ -179,45 +158,30 @@ class HomeScreen extends StatelessWidget {
 }
 
 class HomeController extends GetxController {
-  var qrData = (-1).obs;
+  var qrData = ''.obs;
   RxInt remainingSeconds = 30.obs;
   Timer? timer;
 
-  // 좌석 및 혼잡도 관련 필드
-  RxInt monitorCount = 0.obs;
-  RxInt desktopCount = 0.obs;
-  RxInt groupStudyCount = 0.obs;
+  // 혼잡도 관련 필드
   RxInt personCount = 0.obs;
-  RxInt monitorTotalCount = 0.obs;
-  RxInt desktopTotalCount = 0.obs;
-  RxInt groupStudyTotalCount = 0.obs;
-  RxInt personTotalCount = 0.obs; // 누락된 필드 추가
+  RxInt personTotalCount = 60.obs;
   var congestionStatus = '보통'.obs;
   var congestionStatusColor = Colors.yellow.obs;
 
   // 사용자 정보 관련 필드
   RxString studentId = ''.obs;
-  RxString name = ''.obs;
-  RxString email = ''.obs;
-  RxString photoUrl = ''.obs;
-  RxString professor = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
-    loadUserInfo(); // 메서드 호출 추가
-    fetchCongestionData();
+    Timer.periodic(const Duration(seconds: 10), (timer) {
+      fetchCongestionData();
+      loadUserInfo();
+    });
   }
 
-  // 사용자 정보를 SharedPreferences에서 로드하는 메서드
   void loadUserInfo() {
-    studentId.value = AppPreferences().prefs?.getString('studentId') ?? '';
-    name.value = AppPreferences().prefs?.getString('name') ?? '';
-    email.value = AppPreferences().prefs?.getString('email') ?? '';
-    photoUrl.value = AppPreferences().prefs?.getString('photoUrl') ?? '';
-    professor.value = AppPreferences().prefs?.getString('professor') ?? '';
-
-    print("[DEBUG] Loaded user data - studentId: $studentId, name: $name, email: $email, photoUrl: $photoUrl, professor: $professor");
+    studentId.value = AppPreferences().prefs?.getString('studentId') ?? '12345'; // 임시 값 설정
   }
 
   Future<void> fetchCongestionData() async {
@@ -226,45 +190,45 @@ class HomeController extends GetxController {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         personCount.value = data['person_count'] ?? 0;
-        personTotalCount.value = data['person_total_count'] ?? 0; // 누락된 필드 할당
+        personTotalCount.value = data['person_total_count'] ?? 60;
         congestionStatus.value = data['congestion_status'] ?? '데이터 없음';
         congestionStatusColor.value = congestionStatus.value == '쾌적'
             ? Colors.green
             : congestionStatus.value == '혼잡'
             ? Colors.red
             : Colors.yellow;
+      } else {
+        print("Failed to fetch congestion data: ${response.statusCode}");
       }
     } catch (e) {
-      print("Failed to fetch congestion data: $e");
+      print("Exception while fetching congestion data: $e");
     }
   }
 
-  void startTimer() {
-    refreshQr();
-    timer?.cancel();
-    remainingSeconds.value = 30;
-    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (remainingSeconds.value > 0) {
-        remainingSeconds.value--;
+  Future<void> fetchQrFromServer() async {
+    try {
+      final url = 'http://3.39.184.195:5000/generate_qr';
+      final headers = {'Content-Type': 'application/json'};
+      final body = json.encode({'student_id': studentId.value});
+
+      final response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        qrData.value = base64Encode(response.bodyBytes);
       } else {
-        refreshQr();
-        remainingSeconds.value = 30;
+        print('Failed to fetch QR: ${response.body}');
       }
-    });
+    } catch (e) {
+      print('Error fetching QR from server: $e');
+    }
   }
 
   void stopTimer() {
     timer?.cancel();
-    qrData.value = -1;
-  }
-
-  void refreshQr() {
-    qrData.value = Random().nextInt(10000);
-  }
-
-  @override
-  void onClose() {
-    timer?.cancel();
-    super.onClose();
+    qrData.value = '';
   }
 }
